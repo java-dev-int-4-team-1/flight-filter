@@ -53,8 +53,8 @@ class FlightBuilder {
 class Flight {
     private final List<Segment> segments;
 
-    Flight(final List<Segment> segs) {
-        segments = segs;
+    Flight(final List<Segment> segments) {
+        this.segments = segments;
     }
 
     List<Segment> getSegments() {
