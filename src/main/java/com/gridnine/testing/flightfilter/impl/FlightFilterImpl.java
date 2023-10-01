@@ -54,9 +54,7 @@ public class FlightFilterImpl implements FlightFilter {
         //Sort the segments
         Stream<Segment> segmentsSorted = flight.getSegments()
                 .stream()
-                .sorted((Segment s1, Segment s2) ->
-                        s1.getDepartureDate().toEpochSecond(ZoneOffset.UTC) >
-                                s2.getDepartureDate().toEpochSecond(ZoneOffset.UTC) ? 1 : -1);
+                .sorted();
 
         //Iterate through the sorted segments
         Iterator<Segment> segmentIterator = segmentsSorted.iterator();

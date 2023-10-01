@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Bean that represents a flight segment.
  */
-public class Segment {
+public class Segment implements Comparable<Segment> {
     private final LocalDateTime departureDate;
 
     private final LocalDateTime arrivalDate;
@@ -31,5 +31,21 @@ public class Segment {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         return '[' + departureDate.format(fmt) + '|' + arrivalDate.format(fmt)
                 + ']';
+    }
+
+    @Override
+    public int compareTo(Segment that) {
+        if (that == null) {
+            return 1;
+        }
+
+        int departureComparison = departureDate.compareTo(that.departureDate);
+
+        if (departureComparison != 0) {
+            return departureComparison;
+        }
+
+        return arrivalDate.compareTo(that.arrivalDate);
+
     }
 }
