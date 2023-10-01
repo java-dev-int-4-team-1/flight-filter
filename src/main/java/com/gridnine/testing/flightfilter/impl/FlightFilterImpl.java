@@ -45,12 +45,12 @@ public class FlightFilterImpl implements FlightFilter {
     public List<Flight> getFlightsWithGroundTimeIsNotMoreThan2Hours(List<Flight> flights) {
         return flights
             .stream()
-            .filter(FlightFilterImpl::doesNotHaveTotalTimeBetweenAllTheSegmentsOnLandMoreThan2Hours)
+            .filter(FlightFilterImpl::doesNotHaveGroundTimeMoreThan2Hours)
             .collect(Collectors.toList()
         );
     }
 
-    private static boolean doesNotHaveTotalTimeBetweenAllTheSegmentsOnLandMoreThan2Hours(Flight flight) {
+    private static boolean doesNotHaveGroundTimeMoreThan2Hours(Flight flight) {
         //Sort the segments
         Stream<Segment> segmentsSorted = flight.getSegments()
                 .stream()
