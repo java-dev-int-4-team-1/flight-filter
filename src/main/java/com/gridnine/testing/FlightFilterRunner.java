@@ -18,7 +18,7 @@ public class FlightFilterRunner {
 
         flightPrinter.printFlights("(all the flights)", flights);
         flightPrinter.printFlights(
-                 "having no segment with the departure is not in the past",
+                 "having no segment with the departure which is in the past",
                 flightFilter.getFlightsWithAnySegmentWithDepartureNotInThePast(flights));
         flightPrinter.printFlights(
                 "having all the segments with the arrival after the departure",
