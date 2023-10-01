@@ -35,10 +35,7 @@ public class Segment implements Comparable<Segment> {
 
     @Override
     public int compareTo(Segment that) {
-        if (that == null) {
-            return 1;
-        }
-
+        Objects.requireNonNull(that);
         int departureComparison = departureDate.compareTo(that.departureDate);
 
         if (departureComparison != 0) {
