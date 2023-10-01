@@ -18,14 +18,14 @@ public class FlightFilterRunner {
 
         flightPrinter.printFlights("(all the flights)", flights);
         flightPrinter.printFlights(
-                "where there is a segment with the departure is after now",
-                flightFilter.getFlightsWithAnySegmentWhereDepartureAfterNow(flights));
+                "With there is a segment with the departure is after now",
+                flightFilter.getFlightsWithAnySegmentWithDepartureNotInThePast(flights));
         flightPrinter.printFlights(
-                "where all the segments have the arrival after the departure",
-                flightFilter.getFlightsWithSegmentsWhereArrivalIsNotBeforeDeparture(flights));
+                "With all the segments have the arrival after the departure",
+                flightFilter.getFlightsWithSegmentsWithArrivalIsNotBeforeDeparture(flights));
        flightPrinter.printFlights(
-               "where the total time between all the segments on land is not more than 2 hours",
-               flightFilter.getFlightsWhereTotalTimeBetweenAllTheSegmentsOnLandIsNotMoreThan2Hours(flights)
+               "With the total time between all the segments on land is not more than 2 hours",
+               flightFilter.getFlightsWithGroundTimeIsNotMoreThan2Hours(flights)
        );
     }
 }

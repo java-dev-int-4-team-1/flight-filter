@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class FlightFilterImpl implements FlightFilter {
 
     @Override
-    public List<Flight> getFlightsWithAnySegmentWhereDepartureAfterNow(List<Flight> flights) {
+    public List<Flight> getFlightsWithAnySegmentWithDepartureNotInThePast(List<Flight> flights) {
         return flights
                 .stream()
                 .filter(
@@ -29,7 +29,7 @@ public class FlightFilterImpl implements FlightFilter {
     }
 
     @Override
-    public List<Flight> getFlightsWithSegmentsWhereArrivalIsNotBeforeDeparture(List<Flight> flights) {
+    public List<Flight> getFlightsWithSegmentsWithArrivalIsNotBeforeDeparture(List<Flight> flights) {
         return flights
                 .stream()
                 .filter(
@@ -42,7 +42,7 @@ public class FlightFilterImpl implements FlightFilter {
     }
 
     @Override
-    public List<Flight> getFlightsWhereTotalTimeBetweenAllTheSegmentsOnLandIsNotMoreThan2Hours(List<Flight> flights) {
+    public List<Flight> getFlightsWithGroundTimeIsNotMoreThan2Hours(List<Flight> flights) {
         return flights
             .stream()
             .filter(FlightFilterImpl::doesNotHaveTotalTimeBetweenAllTheSegmentsOnLandMoreThan2Hours)

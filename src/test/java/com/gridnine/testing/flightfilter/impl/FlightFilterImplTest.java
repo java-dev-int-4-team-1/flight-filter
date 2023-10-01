@@ -17,8 +17,6 @@ public class FlightFilterImplTest {
 
     FlightFilter flightFilter = new FlightFilterImpl();
 
-    List<Flight> flights = FlightBuilder.createFlights();
-
     private void makeAssertions(List<Flight> flights, List<Flight> result, Condition<Flight> condition) {
 
         ListAssert<Flight> assertThatData   = assertThat(flights);
@@ -40,9 +38,21 @@ public class FlightFilterImplTest {
                 .size().isEqualTo(initialDataSize - expectedSizeDiff);
     }
 
+    private void makeAssertions(List<Flight> flights, List<Flight> result, List<Flight> expectedBeingRemoved) {
+
+        ListAssert<Flight> assertThatResult = assertThat(result);
+        int resultSize = flights.size() - expectedBeingRemoved.size();
+
+        assertThatResult
+                .hasSize(resultSize)
+                .doesNotContainAnyElementsOf(expectedBeingRemoved);
+    }
+
     @Test
-    public void getFlightsWithAnySegmentWhereDepartureAfterNow() {
-        List<Flight> result = flightFilter.getFlightsWithAnySegmentWhereDepartureAfterNow(flights);
+    public void getFlightsWithAnySegmentWithDepartureNotInThePast() {
+        List<Flight> flights = FlightBuilder.createFlights();
+        List<Flight> expectedBeingRemoved = FlightBuilder.getFlightsWithDepartureInThePast();
+        List<Flight> result = flightFilter.getFlightsWithAnySegmentWithDepartureNotInThePast(flights);
 
         Condition<Flight> departureInThePastCondition = new Condition<>(
                 flight -> flight
@@ -52,16 +62,19 @@ public class FlightFilterImplTest {
                                 segment -> segment.getDepartureDate()
                                         .isBefore(LocalDateTime.now()
                                         )
-                        ), "There is a departure in the past"
+                        ), "There is a departure in the past for some segments"
         );
 
         makeAssertions(flights, result, departureInThePastCondition);
+        makeAssertions(flights, result, expectedBeingRemoved);
 
     }
 
     @Test
-    public void getFlightsWithSegmentsWhereArrivalIsNotBeforeDeparture() {
-        List<Flight> result = flightFilter.getFlightsWithSegmentsWhereArrivalIsNotBeforeDeparture(flights);
+    public void getFlightsWithSegmentsWithArrivalIsNotBeforeDeparture() {
+        List<Flight> flights = FlightBuilder.createFlights();
+        List<Flight> expectedBeingRemoved = FlightBuilder.getFlightsWithArrivalBeforeDeparture();
+        List<Flight> result = flightFilter.getFlightsWithSegmentsWithArrivalIsNotBeforeDeparture(flights);
 
         Condition<Flight> arrivalIsBeforeDepartureCondition = new Condition<>(
                 flight -> flight
@@ -71,32 +84,20 @@ public class FlightFilterImplTest {
                                 segment -> segment.getArrivalDate()
                                         .isBefore(segment.getDepartureDate())
                         )
-                , "There is an arrival before the departure"
+                , "There is an arrival before the departure in some segments"
         );
 
         makeAssertions(flights, result, arrivalIsBeforeDepartureCondition);
+        makeAssertions(flights, result, expectedBeingRemoved);
 
     }
 
     @Test
-    public void getFlightsWhereTotalTimeBetweenAllTheSegmentsOnLandIsNotMoreThan2Hours() {
-        //List<Flight> result = flightFilter.getFlightsWhereTotalTimeBetweenAllTheSegmentsOnLandIsNotMoreThan2Hours(flights);
+    public void getFlightsWithGroundTimeIsNotMoreThan2Hours() {
+        List<Flight> expectedBeingRemoved = FlightBuilder.getFlightsWithMoreThatTwoHoursGroundTime();
+        List<Flight> flights = FlightBuilder.createFlights();
+        List<Flight> result = flightFilter.getFlightsWithGroundTimeIsNotMoreThan2Hours(flights);
 
-
-
-/*        Condition<Flight> totalTimeOnLandIsMoreThan2HoursCondition = new Condition<>(
-                flight -> flight
-                        .getSegments()
-                        .stream()
-                        .sorted()
-                        .reduce(0, (subtotal, segment) -> subtotal + segment.);)flatMapToLong().anyMatch(
-                                segment -> segment.getArrivalDate()
-                                        .isBefore(segment.getDepartureDate())
-                        )
-                , "There is an arrival before the departure"
-        );
-
-        makeAssertions(flights, result, totalTimeOnLandIsMoreThan2HoursCondition);
-*/
+        makeAssertions(flights, result, expectedBeingRemoved);
     }
 }
