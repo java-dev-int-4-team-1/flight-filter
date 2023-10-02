@@ -10,15 +10,20 @@ import java.util.List;
  * Factory class to get sample list of flights.
  */
 public class FlightBuilder {
+    private static List<Flight> createdFlights;
     final private static List<Flight> flightsWithDepartureInThePast = new ArrayList<>();
     final private static List<Flight> flightsWithArrivalBeforeDeparture = new ArrayList<>();
     final private static List<Flight> flightsWithMoreThanTwoHoursGroundTime = new ArrayList<>();
 
     private static List<Flight> checkAndReturn(List<Flight> someFlights) {
         if (someFlights.isEmpty()) {
-            throw new IllegalStateException("There should be 'createFlights()' invoked first.");
+            createFlights();
         }
         return someFlights;
+    }
+
+    public static List<Flight> getCreatedFlights() {
+        return (createdFlights == null)? createFlights() : createdFlights;
     }
     public static List<Flight> getFlightsWithDepartureInThePast() {
         return checkAndReturn(flightsWithDepartureInThePast);
@@ -37,7 +42,7 @@ public class FlightBuilder {
         flightsWithArrivalBeforeDeparture.clear();
         flightsWithMoreThanTwoHoursGroundTime.clear();
 
-        return Arrays.asList(
+        return createdFlights = Arrays.asList(
                 //A normal flight with two hour duration
                 createFlight(threeDaysFromNow, threeDaysFromNow.plusHours(2)),
                 //A normal multi segment flight
